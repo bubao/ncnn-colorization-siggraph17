@@ -22,17 +22,17 @@ int main(int argc, char** argv)
             switch(opt){
                 case 'i':
                     in_fname = optarg;
-                    printf("\nInput option value=%s", in_fname);
+                    // printf("\nInput option value=%s", in_fname);
                     break;
                 case 'o':
                     out_fname = optarg;
-                    printf("\nOutput option value=%s", out_fname);
+                    // printf("\nOutput option value=%s", out_fname);
                     break;
                 case '?':
                     if (optopt == 'i'){
                         printf("\nMissing input file name");
                     } else if (optopt == 'o') {
-                         printf("\nMissing output file name");
+                        printf("\nMissing output file name");
                     } else {
                         printf("\nInvalid option received");
                         printf("\nUsage: COLOR_GAN -i input file name -o output file name");
@@ -42,8 +42,8 @@ int main(int argc, char** argv)
 
     }
 
-    char *argv_my[] = {"bw_imge", in_fname, NULL };
-    main_colorization(2, argv_my);
-printf("\nFinal");
-return 0;
+    char *argv_my[] = {"bw_imge", in_fname, out_fname };
+    main_colorization(3, argv_my);
+	// printf("\nFinal");
+	return 0;
 }

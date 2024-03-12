@@ -15,13 +15,13 @@
 #include <vector>
 #include <Sig17Slice.h>
 
-static int colorization(const cv::Mat& bgr, const cv::Mat& out_image)
+static int colorization(const cv::Mat& bgr, const cv::Mat& out_image,const char* imageout)
 {
   ncnn::Net net;
   //net.opt.use_packing_layout = true;
   //net.opt.use_bf16_storage = true;
   //net.opt.num_threads = 1;
-  net.opt.use_vulkan_compute = true;
+  net.opt.use_vulkan_compute = false;
   net.register_custom_layer("Sig17Slice", Sig17Slice_layer_creator);
 
   if (net.load_param("./models/siggraph17_color_sim.param"))
@@ -64,7 +64,7 @@ static int colorization(const cv::Mat& bgr, const cv::Mat& out_image)
   ncnn::Mat out;
   //ex.extract("out_ab", out);
   ex.extract("out_ab", out);
-  std::cout << "out matrix size " << out.w << " x "<< out.h <<"channels " << out.c <<std::endl;
+//   std::cout << "out matrix size " << out.w << " x "<< out.h <<"channels " << out.c <<std::endl;
 
 
   //create LAB material
@@ -87,23 +87,22 @@ static int colorization(const cv::Mat& bgr, const cv::Mat& out_image)
   //normalize values to 0->255
   color.convertTo(color, CV_8UC3, 255);
 
-  imshow("color", color);
-  //imshow("original", Base_img);
-  cv::imwrite("result_colored_out.png",color);
-  cv::waitKey();
+  cv::imwrite(imageout, color);
+//   cv::imwrite("result_colored_out.png", color);
+//   cv::waitKey();
   return 0;
 }
 
 int main_colorization(int argc, char** argv)
 {
-    if (argc != 2)
+    if (argc != 3)
     {
         fprintf(stderr, "Usage: %s [imagepath]\n", argv[0]);
         return -1;
     }
 
     const char* imagepath = argv[1];
-
+    const char* imageout = argv[2];
     cv::Mat m = cv::imread(imagepath, 1);
     if (m.empty())
     {
@@ -111,7 +110,7 @@ int main_colorization(int argc, char** argv)
         return -1;
     }
     cv::Mat out_image;
-    colorization(m, out_image);
+    colorization(m, out_image, imageout);
 
     return 0;
 }

@@ -1,0 +1,5 @@
+build
+img/*
+!img/15.jpg
+COLOR_GAN
+models/siggraph17_color_sim.bin
